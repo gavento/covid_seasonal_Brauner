@@ -64,8 +64,9 @@ def preprocess_data(data_path, last_day=None, schools_unis='two_separate', drop_
                          'Internal Movement Limited', 'Public Information Campaigns', 'Symptomatic Testing']
 
     for f in drop_features:
-        print(f'Dropping NPI {f}')
-        df = df.drop(f, axis=1)
+        if f in df.columns:
+            print(f'Dropping NPI {f}')
+            df = df.drop(f, axis=1)
 
     # pull data
     CMs = list(df.columns[4:])
