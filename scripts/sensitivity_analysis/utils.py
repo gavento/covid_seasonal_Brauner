@@ -28,6 +28,8 @@ def get_model_class_from_str(model_type_str):
         return epm.DeathsOnlyDiscreteRenewalModel
     elif model_type_str == 'complex':
         return epm.ComplexDifferentEffectsModel
+    elif model_type_str == 'complex_seasonal':
+        return epm.ComplexDifferentEffectsWithSeasonalityModel
 
 
 def get_target_accept_from_model_str(model_type_str):
@@ -49,6 +51,8 @@ def get_target_accept_from_model_str(model_type_str):
         return 0.964
     elif model_type_str == 'complex':
         return 0.96
+    elif model_type_str == 'complex_seasonal':
+        return 0.96
 
 
 def add_argparse_arguments(argparse):
@@ -61,7 +65,8 @@ def add_argparse_arguments(argparse):
               | - cases_only: the number of infections is estimated from case data only
               | - deaths_only: the number of infections is estimated from death data only
               | - deaths_only_discrete_renewal: death only discrete renewal model
-              | - complex: different effects model with per intervention variability. This model is the current default""")
+              | - complex: different effects model with per intervention variability. This model is the current default
+              | - complex_seasonal: different effects model with per intervention variability with seasonality""")
     argparse.add_argument('--exp_tag', dest='exp_tag', type=str, help='experiment identification tag')
     argparse.add_argument('--n_chains', dest='n_chains', type=int, help='the number of chains to run in parallel')
     argparse.add_argument('--n_samples', dest='n_samples', type=int, help='the number of samples to draw')
