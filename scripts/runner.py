@@ -17,9 +17,16 @@ argparser.add_argument("--last_day", help="Brauner data: 2020-05-30")
 argparser.add_argument("--output_base")
 argparser.add_argument("-n", "--no_log", action="store_true")
 argparser.add_argument("-P", "--force_progress", action="store_true")
+argparser.add_argument(
+    "--seasonality_peak_index",
+    type=int,
+    default=0,
+    help="Day of 'maximal seasonal R' relative to data start (!) (only used in seasonal model)",
+)
 add_argparse_arguments(argparser)
-# Other args of note: 
+# Other args of note:
 # --model_build_arg_seasonality_peak_index=1
+
 
 def main():
     args, extras = argparser.parse_known_args()
@@ -45,6 +52,7 @@ def main():
 
     if args.force_progress:
         import fastprogress
+
         fastprogress.fastprogress.printing = lambda: True
         fastprogress.fastprogress.ProgressBar.update_every = 10.0
         fastprogress.fastprogress.ProgressBar.first_its = 10
@@ -63,7 +71,11 @@ def main():
     ep = EpidemiologicalParameters()
 
     model_class = get_model_class_from_str(args.model_type)
-    bd = {**ep.get_model_build_dict(), **parse_extra_model_args(extras)}
+    bd = {
+        "seasonality_peak_index": args.seasonality_peak_index,
+        **ep.get_model_build_dict(),
+        **parse_extra_model_args(extras),
+    }
     print(f"\nBD = {bd}")
 
     print("\nBuilding model ...")
@@ -84,11 +96,11 @@ def main():
 
     print("Saving as arviz ...")
     with model.model:
-#        prior = pm.sample_prior_predictive()
+        #        prior = pm.sample_prior_predictive()
         posterior_predictive = pm.sample_posterior_predictive(model.trace)
         pm_data = az.from_pymc3(
             trace=model.trace,
-#            prior=prior,
+            #            prior=prior,
             posterior_predictive=posterior_predictive,
             coords={"R": data.Rs, "D": data.Ds, "CM": data.CMs},
             dims={"CM_Alpha": ["CM"], "RegionR_noise": ["R"]},
