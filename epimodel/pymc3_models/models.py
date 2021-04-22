@@ -1220,6 +1220,7 @@ class ComplexDifferentEffectsWithSeasonalityModel(BaseCMModel):
         :param cases_truncation: maximum reporting delay
         :param seasonality_peak_index: the index of the day of maximal virulence due to seasonality (beginning of data is index 0).
         """
+        print(f"[DBG] Model seasonality_peak_index={seasonality_peak_index}")
         with self.model:
             self.build_npi_prior(cm_prior, cm_prior_scale)
 
