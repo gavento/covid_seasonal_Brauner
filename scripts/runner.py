@@ -16,6 +16,7 @@ argparser.add_argument("data")
 argparser.add_argument("--last_day", help="Brauner data: 2020-05-30")
 argparser.add_argument("--output_base")
 argparser.add_argument("-n", "--no_log", action="store_true")
+argparser.add_argument("-P", "--force_progress", action="store_true")
 add_argparse_arguments(argparser)
 # Other args of note: 
 # --model_build_arg_seasonality_peak_index=1
@@ -41,6 +42,12 @@ def main():
         os.dup2(logprocess.stdin.fileno(), sys.stdout.fileno())
         os.close(sys.stderr.fileno())
         os.dup2(logprocess.stdin.fileno(), sys.stderr.fileno())
+
+    if args.force_progress:
+        import fastprogress
+        fastprogress.fastprogress.printing = lambda: True
+        fastprogress.fastprogress.ProgressBar.update_every = 10.0
+        fastprogress.fastprogress.ProgressBar.first_its = 10
 
     print(f"CMD: {' '.join(sys.argv)}")
 
