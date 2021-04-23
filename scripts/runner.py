@@ -84,7 +84,7 @@ def main():
     with model_class(data) as model:
         model.build_model(**bd)
 
-    print("Running inference ...")
+    print("Running inference ...\n")
     with threadpoolctl.threadpool_limits(limits=1):
         with model.model:
             model.trace = pm.sample(
@@ -97,7 +97,7 @@ def main():
                 init="adapt_diag",
             )
 
-    print("Saving as arviz ...")
+    print("\n\nSaving as arviz ...")
     with model.model:
         try:
             prior = pm.sample_prior_predictive()
