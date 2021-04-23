@@ -31,6 +31,7 @@ nbsphinx = {version = "^0.7.1", extras = ["documentation"]}
 sphinx_rtd_theme = {version = "^0.5.0", extras = ["documentation"]}
 pandoc = {version = "^1.0.2", extras = ["documentation"]}
 pypandoc = {version = "^1.5", extras = ["documentation"]}
+threadpoolctl = "^2.1.0"
 
 
 

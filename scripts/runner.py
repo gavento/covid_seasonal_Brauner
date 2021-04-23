@@ -7,6 +7,7 @@ from datetime import datetime
 import arviz as az
 import numpy as np
 import pymc3 as pm
+import threadpoolctl
 from epimodel import EpidemiologicalParameters, preprocess_data
 
 from scripts.sensitivity_analysis.utils import *
@@ -83,16 +84,17 @@ def main():
         model.build_model(**bd)
 
     print("Running inference ...")
-    with model.model:
-        model.trace = pm.sample(
-            args.n_samples,
-            tune=min(500, args.n_samples),
-            chains=args.n_chains,
-            cores=args.n_chains,
-            max_treedepth=14,
-            target_accept=0.96,
-            init="adapt_diag",
-        )
+    with threadpoolctl.threadpool_limits(limits=1):
+        with model.model:
+            model.trace = pm.sample(
+                args.n_samples,
+                tune=min(500, args.n_samples),
+                chains=args.n_chains,
+                cores=args.n_chains,
+                max_treedepth=14,
+                target_accept=0.96,
+                init="adapt_diag",
+            )
 
     print("Saving as arviz ...")
     with model.model:
