@@ -1195,7 +1195,7 @@ class ComplexDifferentEffectsWithSeasonalityModel(BaseCMModel):
                     deaths_delay_mean_sd=1, deaths_delay_disp_mean=9,
                     deaths_delay_disp_sd=1, cases_delay_mean_mean=10, cases_delay_mean_sd=1, cases_delay_disp_mean=5,
                     cases_delay_disp_sd=1, deaths_truncation=48, cases_truncation=32, growth_noise_scale='prior',
-                    seasonality_peak_index=0,
+                    max_R_day_prior={'type': 'fixed', 'value': 1.0},
                     **kwargs):
         """
         Build NPI effectiveness model
@@ -1218,16 +1218,23 @@ class ComplexDifferentEffectsWithSeasonalityModel(BaseCMModel):
         :param cases_delay_disp_sd: sd of normal prior placed over cases delay dispersion
         :param deaths_truncation: maximum death delay
         :param cases_truncation: maximum reporting delay
-        :param seasonality_peak_index: the index of the day of maximal virulence due to seasonality (beginning of data is index 0).
+        :param max_R_day_prior: prior dict for day of maximum R from seasonality
         """
         print(f"[DBG] Model seasonality_peak_index={seasonality_peak_index}")
         with self.model:
             self.build_npi_prior(cm_prior, cm_prior_scale)
 
-            self.Seasonality = pm.Normal("Seasonality", mu=0.0, sd=1.0)
-            self.SeasonalitySinusoid = pm.Deterministic("SeasonalitySinusoid", T.constant(np.cos((np.arange(self.nDs) - seasonality_peak_index) / 365.0 * 2.0 * 3.14159)))
+            if max_R_day_prior['type'] == 'fixed':
+                self.seasonality_max_R_day = pm.Deterministic("seasonality_max_R_day", T.constant(max_R_day_prior["value"], dtype=np.float32))
+            elif max_R_day_prior['type'] == 'normal':
+                self.seasonality_max_R_day = pm.Normal("seasonality_max_R_day", max_R_day_prior["mean"], max_R_day_prior["scale"])
+            else:
+                raise Exception(f"Invalid max_R_day_prior")
+
+            self.seasonality_beta1 = pm.Normal("seasonality_beta1", mu=0.0, sd=1.0)
+            self.SeasonalitySinusoid = pm.Deterministic("SeasonalitySinusoid", pm.math.cos((self.d.Ds_day_of_year - self.seasonality_max_R_day) / 365.0 * 2.0 * 3.14159))
             self.SeasonalityMultEffect = pm.Deterministic("SeasonalityMultEffect",
-                T.maximum(T.reshape(1.0 + self.Seasonality * self.SeasonalitySinusoid, (1, self.nDs)), 0.01))
+                T.maximum(T.reshape(1.0 + self.seasonality_beta1 * self.SeasonalitySinusoid, (1, self.nDs)), 0.01))
 
             self.CMReduction = pm.Deterministic('CMReduction', T.exp((-1.0) * self.CM_Alpha))
 
