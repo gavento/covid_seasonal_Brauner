@@ -1566,13 +1566,21 @@ python-versions = ">=3.6"
 docs = ["sphinx", "jaraco.packaging (>=8.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "pytest-enabler", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
+[[package]]
+name = "zstd"
+version = "1.4.9.1"
+description = "ZSTD Bindings for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
 [extras]
 documentation = []
 
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.6.9"
-content-hash = "a18685dfb2a2a49bf3e4d3b2a431e974eb0b3e7c336ceb815eaef585aff45688"
+content-hash = "1753c1c0d17911234ddc9fa2d05b7b6b2e43607cb91aa114505c06596cba2335"
 
 [metadata.files]
 alabaster = [
@@ -2613,4 +2621,7 @@ xarray = [
 zipp = [
     {file = "zipp-3.4.1-py3-none-any.whl", hash = "sha256:51cb66cc54621609dd593d1787f286ee42a5c0adbb4b29abea5a63edc3e03098"},
     {file = "zipp-3.4.1.tar.gz", hash = "sha256:3607921face881ba3e026887d8150cca609d517579abe052ac81fc5aeffdbd76"},
+]
+zstd = [
+    {file = "zstd-1.4.9.1.tar.gz", hash = "sha256:714218559970d3aaeb020097ea2601f47e0b6d1867e5576f67b48142ebd8f0e4"},
 ]
