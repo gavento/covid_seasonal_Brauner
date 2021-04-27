@@ -61,6 +61,9 @@ class PreprocessedData(object):
         self.NewDeaths = NewDeaths
         self.NewCases = NewCases
         self.RNames = RNames
+        # 1-based day of the year. "January 1" is 1
+        self.Ds_day_of_year = np.array([t.dayofyear for t in self.Ds], dtype=np.int32)
+
 
     def reduce_regions_from_index(self, reduced_regions_indx):
         """
