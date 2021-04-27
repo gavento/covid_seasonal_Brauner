@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 import subprocess
 import sys
@@ -8,6 +9,7 @@ import arviz as az
 import numpy as np
 import pymc3 as pm
 import threadpoolctl
+import zstd
 from epimodel import EpidemiologicalParameters, preprocess_data
 
 from scripts.sensitivity_analysis.utils import *
@@ -15,33 +17,76 @@ from scripts.sensitivity_analysis.utils import *
 argparser = argparse.ArgumentParser()
 argparser.add_argument("data")
 argparser.add_argument("--last_day", help="Brauner data: 2020-05-30")
-argparser.add_argument("--output_base")
 argparser.add_argument("-n", "--no_log", action="store_true")
 argparser.add_argument("-P", "--force_progress", action="store_true")
 argparser.add_argument("--target_accept", default=0.96, type=float)
 argparser.add_argument(
-    "--seasonality_peak_index",
-    type=int,
-    default=0,
-    help="Day of 'maximal seasonal R' relative to data start (!) (only used in seasonal model)",
+    "--model_config_name",
+    help="Model configuration tag. HACK: used for data identification",
+    default="default",
+)
+argparser.add_argument(
+    "--output_base",
+    dest="output_base",
+    type=str,
+    help="Override destination path prefix (adding '.log', '_summary.json', '_full.netcdf')",
+    default="",
+)
+
+argparser.add_argument(
+    "--basic_R_mean",
+    dest="basic_R_mean",
+    type=float,
+    default=3.28,
+    help="Basic R mean (default 3.28, 1.35 for Sharma et al.)",
+)
+
+argparser.add_argument(
+    "--max_R_day_prior",
+    dest="max_R_day_prior",
+    type=str,
+    default="fixed",
+    help="Prior for the day of the seasonally-highest R ('fixed', 'normal')",
+)
+argparser.add_argument(
+    "--max_R_day",
+    dest="max_R_day",
+    type=float,
+    default=1.0,
+    help="Day of the seasonally-highest R (1..365, default 1 = Jan 1)",
+)
+argparser.add_argument(
+    "--max_R_day_scale",
+    dest="max_R_day_scale",
+    type=float,
+    default=42.0,
+    help="Scale for for the day of the seasonally-highest R (mean is 1 = Jan 1)",
 )
 add_argparse_arguments(argparser)
 # Other args of note:
 # --model_build_arg_seasonality_peak_index=1
 
 
+def load_keys_from_samples(keys, posterior_samples, summary_dict):
+    for k in keys:
+        if k in posterior_samples.keys():
+            # save to list
+            summary_dict[k] = np.asarray(posterior_samples[k]).tolist()
+    return summary_dict
+
+
 def main():
     args, extras = argparser.parse_known_args()
 
     if not args.output_base:
-        ts_str = datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+        ts_str = datetime.now().strftime("%Y-%m-%d-%H%M%S")
         args.output_base = (
             f"runs/{args.exp_tag}_{args.model_type}_{ts_str}_pid{os.getpid()}"
         )
 
     log_output = f"{args.output_base}.log"
-    text_output = f"{args.output_base}.txt"
-    full_output = f"{args.output_base}.netcdf"
+    full_output = f"{args.output_base}_full.netcdf"
+    summary_output = f"{args.output_base}_summary.json.zstd"
     if not args.no_log:
         print(f"Logging to {log_output}")
         logprocess = subprocess.Popen(
@@ -73,11 +118,27 @@ def main():
     ep = EpidemiologicalParameters()
 
     model_class = get_model_class_from_str(args.model_type)
+
+    if args.max_R_day_prior == "fixed":
+        max_R_day_prior = {
+            "type": "fixed",
+            "value": float(args.max_R_day),
+        }
+    elif args.max_R_day_prior == "normal":
+        max_R_day_prior = {
+            "type": "normal",
+            "mean": 1.0,
+            "scale": float(args.max_R_day_scale),
+        }
+    else:
+        raise Exception("Invalid seasonality_max_R_day_prior")
+
     bd = {
-        "seasonality_peak_index": args.seasonality_peak_index,
         **ep.get_model_build_dict(),
         **parse_extra_model_args(extras),
     }
+    bd["max_R_day_prior"] = max_R_day_prior
+    bd["R_prior_mean"] = args.basic_R_prior_mean
     print(f"\nBD = {bd}")
 
     print("\nBuilding model ...")
@@ -115,6 +176,34 @@ def main():
             dims={"CM_Alpha": ["CM"], "RegionR_noise": ["R"]},
         )
         pm_data.to_netcdf(full_output)
+
+    print("\n\nSaving as json ...")
+    all_rhat = az.rhat(pm_data).flatten()
+    print(f"  {np.sum(np.isnan(all_rhat))} Rhat were nan")
+    all_rhat = all_rhat[np.logical_not(np.isnan(all_rhat))]
+
+    info_dict = dict(
+        model_name=str(model_class.__name__),
+        model_config_name=args.model_config_name,
+        divergences=model.trace["diverging"].nonzero()[0].size,
+        # time_per_sample=,
+        # total_runtime=,
+        rhat={
+            "med": float(np.percentile(all_rhat, 50)),
+            "upper": float(np.percentile(all_rhat, 97.5)),
+            "lower": float(np.percentile(all_rhat, 2.5)),
+            "max": float(np.max(all_rhat)),
+            "min": float(np.min(all_rhat)),
+        },
+        data_path=args.data,
+        cm_names=model.d.CMs,
+        exp_tag=args.exp_tag,
+        exp_config=bd,
+        model_kwargs=bd,
+    )
+    load_keys_from_samples([], model.trace, info_dict)
+    with open(summary_output, "w") as f:
+        f.write(zstd.compress(json.dumps(info_dict, ensure_ascii=False, indent=4)))
 
 
 if __name__ == "__main__":
