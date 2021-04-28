@@ -1,9 +1,32 @@
-### Seasonality experiments
+### Sharma data experiments
+
+# Non-seasonal one
+basic_R_normal_Sharma:
+  experiment_file: new_custom.py
+  experiment_tag: basic_R_prior
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex
+    data: "merged_data/all_merged_data_2021-01-22.newvar.brauner.csv"
+    last_day: "2021-01-09"
+    model_config_name: "modelBrauner_dataSharma"
+    basic_R_mean:
+      - 1.35  # Sharma default
+      - 1.1
+      - 1.7
+      - 1.5
 
 seasonality_basic_R_normal_Sharma:
   experiment_file: new_custom.py
   experiment_tag: seasonality_basic_R_prior
+  n_chains: 4
+  n_samples: 1250
   args:
+    model_type: complex_seasonal
+    data: "merged_data/all_merged_data_2021-01-22.newvar.brauner.csv"
+    last_day: "2021-01-09"
+    model_config_name: "modelBrauner_dataSharma"
     basic_R_mean:
       - 1.35  # Sharma default
       - 1.1
@@ -13,14 +36,25 @@ seasonality_basic_R_normal_Sharma:
 seasonality_maxRday_normal_Sharma:
   experiment_file: new_custom.py
   experiment_tag: seasonality_max_R_day
+  n_chains: 4
+  n_samples: 1250
   args:
+    model_type: complex_seasonal
+    data: "merged_data/all_merged_data_2021-01-22.newvar.brauner.csv"
+    last_day: "2021-01-09"
+    model_config_name: "modelBrauner_dataSharma"
     basic_R_mean: 1.35  # Sharma default
     max_R_day_prior: "normal"
 
 seasonality_maxRday_fixed_Sharma:
   experiment_file: new_custom.py
   experiment_tag: seasonality_max_R_day
+  n_chains: 4
+  n_samples: 1250
   args:
+    model_type: complex_seasonal
+    data: "merged_data/all_merged_data_2021-01-22.newvar.brauner.csv"
+    model_config_name: "modelBrauner_dataSharma"
     basic_R_mean: 1.35  # Sharma default
     max_R_day_prior: "fixed"
     max_R_day:
@@ -34,10 +68,17 @@ seasonality_maxRday_fixed_Sharma:
 
 ### Brauner data variants
 
-seasonality_basic_R_normal_Brauner:
+# Non-seasonal one
+basic_R_normal_BraunerTE:
   experiment_file: new_custom.py
-  experiment_tag: seasonality_basic_R_prior
+  experiment_tag: basic_R_prior_mean
+  n_chains: 4
+  n_samples: 1250
   args:
+    model_type: complex
+    data: "merged_data/data_final_nov_temperate_europe.csv"
+    last_day: "2020-05-30"
+    model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean:
       - 3.3  # default for Brauner is 3.28
       - 3.1
@@ -46,17 +87,47 @@ seasonality_basic_R_normal_Brauner:
       - 3.5
       - 3.7
 
-seasonality_maxRday_normal_Brauner:
+seasonality_basic_R_normal_BraunerTE:
+  experiment_file: new_custom.py
+  experiment_tag: seasonality_basic_R_prior
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex_seasonal
+    data: "merged_data/data_final_nov_temperate_europe.csv"
+    last_day: "2020-05-30"
+    model_config_name: "modelBrauner_dataBraunerTE"
+    basic_R_mean:
+      - 3.3  # default for Brauner is 3.28
+      - 3.1
+      - 2.9
+      - 2.7
+      - 3.5
+      - 3.7
+
+seasonality_maxRday_normal_BraunerTE:
   experiment_file: new_custom.py
   experiment_tag: seasonality_max_R_day
+  n_chains: 4
+  n_samples: 1250
   args:
+    model_type: complex_seasonal
+    data: "merged_data/data_final_nov_temperate_europe.csv"
+    last_day: "2020-05-30"
+    model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean: 3.3  # default for Brauner is 3.28
     max_R_day_prior: "normal"
 
-seasonality_maxRday_fixed_Brauner:
+seasonality_maxRday_fixed_BraunerTE:
   experiment_file: new_custom.py
   experiment_tag: seasonality_max_R_day
+  n_chains: 4
+  n_samples: 1250
   args:
+    model_type: complex_seasonal
+    data: "merged_data/data_final_nov_temperate_europe.csv"
+    last_day: "2020-05-30"
+    model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean: 3.3  # default for Brauner is 3.28
     max_R_day_prior: "fixed"
     max_R_day:
@@ -68,19 +139,7 @@ seasonality_maxRday_fixed_Brauner:
       - -13
       - -27
 
-basic_R_normal_Brauner:
-  experiment_file: new_custom.py
-  experiment_tag: basic_R_prior_mean
-  args:
-    basic_R_mean:
-      - 3.3  # default for Brauner is 3.28
-      - 3.1
-      - 2.9
-      - 2.7
-      - 3.5
-      - 3.7
-
-########################
+######################## Old sensitivity analyses below
 
 ###
 # Mask data for one region and output prediction for the masked region. Runs once for each region.
