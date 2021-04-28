@@ -1,21 +1,21 @@
 import argparse
 import json
+import lzma
 import os
 import subprocess
 import sys
+import time
 from datetime import datetime
 
 import arviz as az
 import numpy as np
 import pymc3 as pm
 import threadpoolctl
-import zstd
 from epimodel import EpidemiologicalParameters, preprocess_data
-
 from scripts.sensitivity_analysis.utils import *
 
 argparser = argparse.ArgumentParser()
-argparser.add_argument("data")
+argparser.add_argument("--data", default="")
 argparser.add_argument("--last_day", help="Brauner data: 2020-05-30")
 argparser.add_argument("-n", "--no_log", action="store_true")
 argparser.add_argument("-P", "--force_progress", action="store_true")
@@ -67,11 +67,12 @@ add_argparse_arguments(argparser)
 # --model_build_arg_seasonality_peak_index=1
 
 
-def load_keys_from_samples(keys, posterior_samples, summary_dict):
-    for k in keys:
-        if k in posterior_samples.keys():
+def load_keys_from_samples(keymap, posterior_samples, summary_dict):
+    for k, v in keymap.items():
+        if k in posterior_samples:
             # save to list
-            summary_dict[k] = np.asarray(posterior_samples[k]).tolist()
+            a = np.asarray(posterior_samples[k])
+            summary_dict[v] = a.reshape(-1, a.shape[2:]).tolist()
     return summary_dict
 
 
@@ -86,7 +87,7 @@ def main():
 
     log_output = f"{args.output_base}.log"
     full_output = f"{args.output_base}_full.netcdf"
-    summary_output = f"{args.output_base}_summary.json.zstd"
+    summary_output = f"{args.output_base}_summary.json"
     if not args.no_log:
         print(f"Logging to {log_output}")
         logprocess = subprocess.Popen(
@@ -138,9 +139,14 @@ def main():
         **parse_extra_model_args(extras),
     }
     bd["max_R_day_prior"] = max_R_day_prior
-    bd["R_prior_mean"] = args.basic_R_prior_mean
+    bd["basic_R_prior"] = {
+        "type": "trunc_normal",
+        "mean": args.basic_R_mean,
+    }  ## Note: Used only in output
+    bd["R_prior_mean"] = args.basic_R_mean
     print(f"\nBD = {bd}")
 
+    start = time.time()
     print("\nBuilding model ...")
     with model_class(data) as model:
         model.build_model(**bd)
@@ -157,6 +163,7 @@ def main():
                 target_accept=args.target_accept,
                 init="adapt_diag",
             )
+    end = time.time()
 
     print("\n\nSaving as arviz ...")
     with model.model:
@@ -178,32 +185,47 @@ def main():
         pm_data.to_netcdf(full_output)
 
     print("\n\nSaving as json ...")
-    all_rhat = az.rhat(pm_data).flatten()
-    print(f"  {np.sum(np.isnan(all_rhat))} Rhat were nan")
-    all_rhat = all_rhat[np.logical_not(np.isnan(all_rhat))]
+
+    if args.n_samples >= 4 and args.n_chains >= 2:
+        all_rhat = np.concatenate(
+            [v.values.ravel() for v in az.rhat(pm_data.posterior).data_vars.values()]
+        )
+        print(f"  {np.sum(np.isnan(all_rhat))} Rhat were nan")
+        all_rhat = all_rhat[np.logical_not(np.isnan(all_rhat))]
+        rhat = {
+                "med": float(np.percentile(all_rhat, 50)),
+                "upper": float(np.percentile(all_rhat, 97.5)),
+                "lower": float(np.percentile(all_rhat, 2.5)),
+                "max": float(np.max(all_rhat)),
+                "min": float(np.min(all_rhat)),
+            }
+    else:
+        rhat = None
 
     info_dict = dict(
         model_name=str(model_class.__name__),
         model_config_name=args.model_config_name,
         divergences=model.trace["diverging"].nonzero()[0].size,
-        # time_per_sample=,
-        # total_runtime=,
-        rhat={
-            "med": float(np.percentile(all_rhat, 50)),
-            "upper": float(np.percentile(all_rhat, 97.5)),
-            "lower": float(np.percentile(all_rhat, 2.5)),
-            "max": float(np.max(all_rhat)),
-            "min": float(np.min(all_rhat)),
-        },
+        time_per_sample=float(end - start) / args.n_samples,
+        total_runtime=float(end - start),
+        rhat=rhat,
         data_path=args.data,
         cm_names=model.d.CMs,
         exp_tag=args.exp_tag,
         exp_config=bd,
         model_kwargs=bd,
     )
-    load_keys_from_samples([], model.trace, info_dict)
-    with open(summary_output, "w") as f:
-        f.write(zstd.compress(json.dumps(info_dict, ensure_ascii=False, indent=4)))
+    load_keys_from_samples(
+        {
+            "seasonality_beta1": "seasonality_beta1",
+            "seasonality_max_R_day": "seasonality_max_R_day",
+            "CM_Alpha": "alpha_i",
+        },
+        pm_data.posterior,
+        info_dict,
+    )
+    with open(summary_output, "wb") as f:
+        f.write(json.dumps(info_dict, ensure_ascii=False, indent=4).encode("utf8"))
 
 
 if __name__ == "__main__":

@@ -1220,7 +1220,6 @@ class ComplexDifferentEffectsWithSeasonalityModel(BaseCMModel):
         :param cases_truncation: maximum reporting delay
         :param max_R_day_prior: prior dict for day of maximum R from seasonality
         """
-        print(f"[DBG] Model seasonality_peak_index={seasonality_peak_index}")
         with self.model:
             self.build_npi_prior(cm_prior, cm_prior_scale)
 
