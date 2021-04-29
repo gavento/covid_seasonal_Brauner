@@ -1,7 +1,7 @@
 ### Sharma data experiments
 
 # Non-seasonal one - default
-basic_R_normal_Sharma:
+default_Sharma:
   experiment_file: new_custom.py
   experiment_tag: default
   n_chains: 4
