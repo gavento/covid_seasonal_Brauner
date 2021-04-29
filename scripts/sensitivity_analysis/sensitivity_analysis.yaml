@@ -71,7 +71,7 @@ seasonality_maxRday_fixed_Sharma:
 # Non-seasonal one, the entire world
 basic_R_normal_Brauner:
   experiment_file: new_custom.py
-  experiment_tag: basic_R_prior_mean
+  experiment_tag: basic_R_prior
   n_chains: 4
   n_samples: 1250
   args:
@@ -89,7 +89,7 @@ basic_R_normal_Brauner:
 # Non-seasonal one, temperate europe only
 basic_R_normal_BraunerTE:
   experiment_file: new_custom.py
-  experiment_tag: basic_R_prior_mean
+  experiment_tag: basic_R_prior
   n_chains: 4
   n_samples: 1250
   args:

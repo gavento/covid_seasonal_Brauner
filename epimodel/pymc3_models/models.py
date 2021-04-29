@@ -1230,7 +1230,7 @@ class ComplexDifferentEffectsWithSeasonalityModel(BaseCMModel):
             else:
                 raise Exception(f"Invalid max_R_day_prior")
 
-            self.seasonality_beta1 = pm.Normal("seasonality_beta1", mu=0.0, sd=1.0)
+            self.seasonality_beta1 = pm.Uniform("seasonality_beta1", -0.95, 0.95)
             self.SeasonalitySinusoid = pm.Deterministic("SeasonalitySinusoid", pm.math.cos((self.d.Ds_day_of_year - self.seasonality_max_R_day) / 365.0 * 2.0 * 3.14159))
             self.SeasonalityMultEffect = pm.Deterministic("SeasonalityMultEffect",
                 T.maximum(T.reshape(1.0 + self.seasonality_beta1 * self.SeasonalitySinusoid, (1, self.nDs)), 0.01))
@@ -1254,15 +1254,18 @@ class ComplexDifferentEffectsWithSeasonalityModel(BaseCMModel):
 
             self.RegionR_noise = pm.Normal('RegionR_noise', 0, 1, shape=(self.nRs), )
             self.RegionR = pm.Deterministic('RegionR', R_prior_mean + self.RegionR_noise * self.HyperRVar)
+            self.MeanRegionR = pm.Deterministic('MeanRegionR', self.RegionR.mean())
 
             self.ActiveCMs = pm.Data('ActiveCMs', self.d.ActiveCMs)
 
             active_cm_reduction = T.reshape(self.AllCMAlpha, (self.nRs, self.nCMs, 1)) * self.ActiveCMs
             growth_reduction = T.sum(active_cm_reduction, axis=1)
 
+            # Divide RegionR by self.SeasonalityMultEffect[0, 0] to get mean-seasonality R
             self.ExpectedLogR = pm.Deterministic(
                 'ExpectedLogR',
-                T.reshape(pm.math.log(self.RegionR), (self.nRs, 1)) - growth_reduction + pm.math.log(self.SeasonalityMultEffect),
+                T.reshape(pm.math.log(self.RegionR), (self.nRs, 1)) - growth_reduction
+                    + pm.math.log(self.SeasonalityMultEffect) - pm.math.log(self.SeasonalityMultEffect[0, 0]),
             )
 
             # convert R into growth rates

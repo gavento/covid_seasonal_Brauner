@@ -220,6 +220,7 @@ def main():
             "seasonality_beta1": "seasonality_beta1",
             "seasonality_max_R_day": "seasonality_max_R_day",
             "CM_Alpha": "alpha_i",
+            "MeanRegionR": "mean_region_R",
         },
         pm_data.posterior,
         info_dict,
