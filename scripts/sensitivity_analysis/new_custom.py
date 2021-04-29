@@ -72,7 +72,7 @@ def load_keys_from_samples(keymap, posterior_samples, summary_dict):
         if k in posterior_samples:
             # save to list
             a = np.asarray(posterior_samples[k])
-            summary_dict[v] = a.reshape(-1, a.shape[2:]).tolist()
+            summary_dict[v] = a.reshape(-1, *a.shape[2:]).tolist()
     return summary_dict
 
 
