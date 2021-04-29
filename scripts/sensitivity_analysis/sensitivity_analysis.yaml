@@ -8,7 +8,7 @@ basic_R_normal_Sharma:
   n_samples: 1250
   args:
     model_type: complex
-    data: "merged_data/all_merged_data_2021-01-22.newvar.brauner.csv"
+    data: "d/modelBrauner_dataSharma.csv"
     last_day: "2021-01-09"
     model_config_name: "modelBrauner_dataSharma"
     basic_R_mean:
@@ -24,7 +24,7 @@ seasonality_basic_R_normal_Sharma:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "merged_data/all_merged_data_2021-01-22.newvar.brauner.csv"
+    data: "d/modelBrauner_dataSharma.csv"
     last_day: "2021-01-09"
     model_config_name: "modelBrauner_dataSharma"
     basic_R_mean:
@@ -40,7 +40,7 @@ seasonality_maxRday_normal_Sharma:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "merged_data/all_merged_data_2021-01-22.newvar.brauner.csv"
+    data: "d/modelBrauner_dataSharma.csv"
     last_day: "2021-01-09"
     model_config_name: "modelBrauner_dataSharma"
     basic_R_mean: 1.35  # Sharma default
@@ -53,7 +53,7 @@ seasonality_maxRday_fixed_Sharma:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "merged_data/all_merged_data_2021-01-22.newvar.brauner.csv"
+    data: "d/modelBrauner_dataSharma.csv"
     model_config_name: "modelBrauner_dataSharma"
     basic_R_mean: 1.35  # Sharma default
     max_R_day_prior: "fixed"
@@ -68,7 +68,25 @@ seasonality_maxRday_fixed_Sharma:
 
 ### Brauner data variants
 
-# Non-seasonal one
+# Non-seasonal one, the entire world
+basic_R_normal_Brauner:
+  experiment_file: new_custom.py
+  experiment_tag: basic_R_prior_mean
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex
+    data: "d/modelBrauner_dataBrauner.csv"
+    last_day: "2020-05-30"
+    model_config_name: "modelBrauner_dataBrauner"
+    basic_R_mean:
+      - 3.3  # default for Brauner is 3.28
+      - 3.1
+      - 2.9
+      - 3.5
+      - 3.7
+
+# Non-seasonal one, temperate europe only
 basic_R_normal_BraunerTE:
   experiment_file: new_custom.py
   experiment_tag: basic_R_prior_mean
@@ -76,14 +94,13 @@ basic_R_normal_BraunerTE:
   n_samples: 1250
   args:
     model_type: complex
-    data: "merged_data/data_final_nov_temperate_europe.csv"
+    data: "d/modelBrauner_dataBraunerTE.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean:
       - 3.3  # default for Brauner is 3.28
       - 3.1
       - 2.9
-      - 2.7
       - 3.5
       - 3.7
 
@@ -94,14 +111,13 @@ seasonality_basic_R_normal_BraunerTE:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "merged_data/data_final_nov_temperate_europe.csv"
+    data: "d/modelBrauner_dataBraunerTE.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean:
       - 3.3  # default for Brauner is 3.28
       - 3.1
       - 2.9
-      - 2.7
       - 3.5
       - 3.7
 
@@ -112,7 +128,7 @@ seasonality_maxRday_normal_BraunerTE:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "merged_data/data_final_nov_temperate_europe.csv"
+    data: "d/modelBrauner_dataBraunerTE.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean: 3.3  # default for Brauner is 3.28
@@ -125,7 +141,7 @@ seasonality_maxRday_fixed_BraunerTE:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "merged_data/data_final_nov_temperate_europe.csv"
+    data: "d/modelBrauner_dataBraunerTE.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean: 3.3  # default for Brauner is 3.28
