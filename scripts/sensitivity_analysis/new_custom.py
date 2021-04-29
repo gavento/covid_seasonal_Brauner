@@ -6,6 +6,7 @@ import subprocess
 import sys
 import time
 from datetime import datetime
+from pathlib import Path
 
 import arviz as az
 import numpy as np
@@ -82,8 +83,9 @@ def main():
     if not args.output_base:
         ts_str = datetime.now().strftime("%Y-%m-%d-%H%M%S")
         args.output_base = (
-            f"runs/{args.exp_tag}_{args.model_type}_{ts_str}_pid{os.getpid()}"
+            f"sensitivity_analysis/{args.model_config_name}/{args.exp_tag}/{args.model_type}_{ts_str}_pid{os.getpid()}"
         )
+    Path(args.output_base).parent.mkdir(parents=True, exist_ok=True)
 
     log_output = f"{args.output_base}.log"
     full_output = f"{args.output_base}_full.netcdf"

@@ -1,9 +1,22 @@
 ### Sharma data experiments
 
+# Non-seasonal one - default
+basic_R_normal_Sharma:
+  experiment_file: new_custom.py
+  experiment_tag: default
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex
+    data: "d/modelBrauner_dataSharma.csv"
+    last_day: "2021-01-09"
+    model_config_name: "modelBrauner_dataSharma"
+    basic_R_mean: 1.35  # Sharma default
+
 # Non-seasonal one
 basic_R_normal_Sharma:
   experiment_file: new_custom.py
-  experiment_tag: basic_R_prior
+  experiment_tag: basic_R_prior_mean
   n_chains: 4
   n_samples: 1250
   args:
@@ -68,10 +81,23 @@ seasonality_maxRday_fixed_Sharma:
 
 ### Brauner data variants
 
+# Non-seasonal one, temperate europe only
+default_BraunerTE:
+  experiment_file: new_custom.py
+  experiment_tag: default
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex
+    data: "d/modelBrauner_dataBraunerTE.csv"
+    last_day: "2020-05-30"
+    model_config_name: "modelBrauner_dataBraunerTE"
+    basic_R_mean: 3.3  # default for Brauner is 3.28
+
 # Non-seasonal one, the entire world
 basic_R_normal_Brauner:
   experiment_file: new_custom.py
-  experiment_tag: basic_R_prior
+  experiment_tag: basic_R_prior_mean
   n_chains: 4
   n_samples: 1250
   args:
@@ -89,7 +115,7 @@ basic_R_normal_Brauner:
 # Non-seasonal one, temperate europe only
 basic_R_normal_BraunerTE:
   experiment_file: new_custom.py
-  experiment_tag: basic_R_prior
+  experiment_tag: basic_R_prior_mean
   n_chains: 4
   n_samples: 1250
   args:
