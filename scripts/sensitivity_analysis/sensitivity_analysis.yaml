@@ -35,7 +35,7 @@ seasonality_basic_R_normal_Sharma:
 
 seasonality_maxRday_normal_Sharma:
   experiment_file: new_custom.py
-  experiment_tag: seasonality_max_R_day
+  experiment_tag: seasonality_max_R_day_normal
   n_chains: 4
   n_samples: 1250
   args:
@@ -48,7 +48,7 @@ seasonality_maxRday_normal_Sharma:
 
 seasonality_maxRday_fixed_Sharma:
   experiment_file: new_custom.py
-  experiment_tag: seasonality_max_R_day
+  experiment_tag: seasonality_max_R_day_fixed
   n_chains: 4
   n_samples: 1250
   args:
@@ -123,7 +123,7 @@ seasonality_basic_R_normal_BraunerTE:
 
 seasonality_maxRday_normal_BraunerTE:
   experiment_file: new_custom.py
-  experiment_tag: seasonality_max_R_day
+  experiment_tag: seasonality_max_R_day_normal
   n_chains: 4
   n_samples: 1250
   args:
@@ -136,7 +136,7 @@ seasonality_maxRday_normal_BraunerTE:
 
 seasonality_maxRday_fixed_BraunerTE:
   experiment_file: new_custom.py
-  experiment_tag: seasonality_max_R_day
+  experiment_tag: seasonality_max_R_day_fixed
   n_chains: 4
   n_samples: 1250
   args:
