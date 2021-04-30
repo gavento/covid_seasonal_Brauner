@@ -81,6 +81,19 @@ seasonality_maxRday_fixed_Sharma:
 
 ### Brauner data variants
 
+# Non-seasonal one, ENTIRE WORLD
+default_Brauner:
+  experiment_file: new_custom.py
+  experiment_tag: default
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex
+    data: "d/modelBrauner_dataBrauner.csv"
+    last_day: "2020-05-30"
+    model_config_name: "modelBrauner_dataBrauner"
+    basic_R_mean: 3.3  # default for Brauner is 3.28
+
 # Non-seasonal one, temperate europe only
 default_BraunerTE:
   experiment_file: new_custom.py
