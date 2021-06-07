@@ -1,6 +1,6 @@
 # Seasonal model of Brauner et al. COVID-19 Nonpharmaceutical Interventions Effectiveness
 
-This repository contains the data and code used in the paper [Gavenčiak et al.: *Seasonal variation in SARS-CoV-2 transmission in temperate climates*](TODO).
+This repository contains one part of the data and code used in the paper [Gavenčiak et al.: *Seasonal variation in SARS-CoV-2 transmission in temperate climates*](TODO). **Note**: this paper is a preprint and has not yet been peer-reviewed.
 
 This repository contains the seasonal variant of the model of [Brauner et al. *Inferring the effectiveness of government interventions against COVID-19*](https://www.medrxiv.org/content/10.1101/2020.05.28.20116129v2.article-info) and has been forked from [epidemics/COVIDNPIs](https://github.com/epidemics/COVIDNPIs); please see that repo for further information.
 
