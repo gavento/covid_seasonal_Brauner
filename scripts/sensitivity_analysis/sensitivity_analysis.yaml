@@ -194,6 +194,42 @@ seasonality_maxRday_fixed_BraunerTE:
       - -13
       - -27
 
+### Brauner TE with mobility
+seasonality_mobility_1:
+  experiment_file: new_custom.py
+  experiment_tag: seasonality_mobility
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex_seasonal
+    data: "d/modelBrauner_dataBraunerTE_mobility_RecreGrocTransWorkResid.csv"
+    last_day: "2020-05-30"
+    model_config_name: "modelBrauner_dataBraunerTE"
+    basic_R_mean: 3.3  # default for Brauner is 3.28
+seasonality_mobility_2:
+  experiment_file: new_custom.py
+  experiment_tag: seasonality_mobility
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex_seasonal
+    data: "d/modelBrauner_dataBraunerTE_mobility_GrocTransWorkResid.csv"
+    last_day: "2020-05-30"
+    model_config_name: "modelBrauner_dataBraunerTE"
+    basic_R_mean: 3.3  # default for Brauner is 3.28
+seasonality_mobility_3:
+  experiment_file: new_custom.py
+  experiment_tag: seasonality_mobility
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex_seasonal
+    data: "d/modelBrauner_dataBraunerTE_mobility_GrocTransWork.csv"
+    last_day: "2020-05-30"
+    model_config_name: "modelBrauner_dataBraunerTE"
+    basic_R_mean: 3.3  # default for Brauner is 3.28
+
+
 ######################## Old sensitivity analyses below
 
 ###
