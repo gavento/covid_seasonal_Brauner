@@ -1243,7 +1243,7 @@ class ComplexDifferentEffectsWithSeasonalityModel(BaseCMModel):
             self.SeasonalitySinusoid = pm.Deterministic("SeasonalitySinusoid", pm.math.cos((self.d.Ds_day_of_year - self.seasonality_max_R_day) / 365.0 * 2.0 * 3.14159))
             self.SeasonalityMultEffect = pm.Deterministic("SeasonalityMultEffect",
                 T.maximum(1.0 +
-                    T.reshape(self.seasonality_beta1, (self.nRs, 1)) *
+                    T.reshape(self.seasonality_local_beta1, (self.nRs, 1)) *
                     T.reshape(self.SeasonalitySinusoid, (1, self.nDs)), 0.01))
 
             self.CMReduction = pm.Deterministic('CMReduction', T.exp((-1.0) * self.CM_Alpha))
