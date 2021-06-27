@@ -160,6 +160,25 @@ seasonality_basic_R_normal_BraunerTE:
       - 3.5
       - 3.7
 
+seasonality_local_BraunerTE:
+  experiment_file: new_custom.py
+  experiment_tag: seasonality_local
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex_seasonal
+    data: "d/modelBrauner_dataBraunerTE.csv"
+    last_day: "2020-05-30"
+    model_config_name: "modelBrauner_dataBraunerTE"
+    basic_R_mean: 3.3  # default for Brauner is 3.28
+    different_seasonality: True
+    local_seasonality_sd:
+      - 0.02
+      - 0.05
+      - 0.1
+      - 0.2
+      - 0.5
+
 seasonality_maxRday_normal_BraunerTE:
   experiment_file: new_custom.py
   experiment_tag: seasonality_max_R_day_normal

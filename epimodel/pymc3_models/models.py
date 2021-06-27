@@ -1196,6 +1196,8 @@ class ComplexDifferentEffectsWithSeasonalityModel(BaseCMModel):
                     deaths_delay_disp_sd=1, cases_delay_mean_mean=10, cases_delay_mean_sd=1, cases_delay_disp_mean=5,
                     cases_delay_disp_sd=1, deaths_truncation=48, cases_truncation=32, growth_noise_scale='prior',
                     max_R_day_prior={'type': 'fixed', 'value': 1.0},
+                    different_seasonality=False,
+                    local_seasonality_sd=0.1,
                     **kwargs):
         """
         Build NPI effectiveness model
@@ -1231,9 +1233,18 @@ class ComplexDifferentEffectsWithSeasonalityModel(BaseCMModel):
                 raise Exception(f"Invalid max_R_day_prior")
 
             self.seasonality_beta1 = pm.Uniform("seasonality_beta1", -0.95, 0.95)
+            seasonality_beta1_bc = self.seasonality_beta1 * T.ones(self.nRs)
+            if different_seasonality:
+                self.seasonality_local_beta1 = pm.Normal("seasonality_local_beta1",
+                    seasonality_beta1_bc, sigma=local_seasonality_sd)
+            else:
+                self.seasonality_local_beta1 = pm.Deterministic("seasonality_local_beta1", 
+                    seasonality_beta1_bc)
             self.SeasonalitySinusoid = pm.Deterministic("SeasonalitySinusoid", pm.math.cos((self.d.Ds_day_of_year - self.seasonality_max_R_day) / 365.0 * 2.0 * 3.14159))
             self.SeasonalityMultEffect = pm.Deterministic("SeasonalityMultEffect",
-                T.maximum(T.reshape(1.0 + self.seasonality_beta1 * self.SeasonalitySinusoid, (1, self.nDs)), 0.01))
+                T.maximum(1.0 +
+                    T.reshape(self.seasonality_beta1, (self.nRs, 1)) *
+                    T.reshape(self.SeasonalitySinusoid, (1, self.nDs)), 0.01))
 
             self.CMReduction = pm.Deterministic('CMReduction', T.exp((-1.0) * self.CM_Alpha))
 
@@ -1361,6 +1372,8 @@ class ComplexDifferentEffectsWithSeasonalityModel(BaseCMModel):
                 shape=(len(self.all_observed_deaths),),
                 observed=self.d.NewDeaths.data.reshape((self.nRs * self.nDs,))[self.all_observed_deaths]
             )
+
+
 
 
 class CasesOnlyComplexDifferentEffectsModel(BaseCMModel):
