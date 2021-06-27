@@ -1236,7 +1236,7 @@ class ComplexDifferentEffectsWithSeasonalityModel(BaseCMModel):
             seasonality_beta1_bc = self.seasonality_beta1 * T.ones(self.nRs)
             if different_seasonality:
                 self.seasonality_local_beta1 = pm.Normal("seasonality_local_beta1",
-                    seasonality_beta1_bc, sigma=local_seasonality_sd)
+                    seasonality_beta1_bc, sigma=local_seasonality_sd, shape=(self.nRs, ))
             else:
                 self.seasonality_local_beta1 = pm.Deterministic("seasonality_local_beta1", 
                     seasonality_beta1_bc)

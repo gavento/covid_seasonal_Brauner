@@ -63,6 +63,9 @@ argparser.add_argument(
     default=42.0,
     help="Scale for for the day of the seasonally-highest R (mean is 1 = Jan 1)",
 )
+argparser.add_argument("--different_seasonality", type=str, default="False")
+argparser.add_argument("--local_seasonality_sd", type=float, default=0.1)
+
 add_argparse_arguments(argparser)
 # Other args of note:
 # --model_build_arg_seasonality_peak_index=1
@@ -82,9 +85,7 @@ def main():
 
     if not args.output_base:
         ts_str = datetime.now().strftime("%Y-%m-%d-%H%M%S")
-        args.output_base = (
-            f"sensitivity_analysis/{args.model_config_name}/{args.exp_tag}/{args.model_type}_{ts_str}_pid{os.getpid()}"
-        )
+        args.output_base = f"sensitivity_analysis/{args.model_config_name}/{args.exp_tag}/{args.model_type}_{ts_str}_pid{os.getpid()}"
     Path(args.output_base).parent.mkdir(parents=True, exist_ok=True)
 
     log_output = f"{args.output_base}.log"
@@ -146,6 +147,9 @@ def main():
         "mean": args.basic_R_mean,
     }  ## Note: Used only in output
     bd["R_prior_mean"] = args.basic_R_mean
+    assert args.different_seasonality in ["True", "False"]
+    bd["different_seasonality"] = (args.different_seasonality == "True")
+    bd["local_seasonality_sd"] = args.local_seasonality_sd
     print(f"\nBD = {bd}")
 
     start = time.time()
@@ -195,12 +199,12 @@ def main():
         print(f"  {np.sum(np.isnan(all_rhat))} Rhat were nan")
         all_rhat = all_rhat[np.logical_not(np.isnan(all_rhat))]
         rhat = {
-                "med": float(np.percentile(all_rhat, 50)),
-                "upper": float(np.percentile(all_rhat, 97.5)),
-                "lower": float(np.percentile(all_rhat, 2.5)),
-                "max": float(np.max(all_rhat)),
-                "min": float(np.min(all_rhat)),
-            }
+            "med": float(np.percentile(all_rhat, 50)),
+            "upper": float(np.percentile(all_rhat, 97.5)),
+            "lower": float(np.percentile(all_rhat, 2.5)),
+            "max": float(np.max(all_rhat)),
+            "min": float(np.min(all_rhat)),
+        }
     else:
         rhat = None
 
