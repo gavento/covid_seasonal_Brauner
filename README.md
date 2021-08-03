@@ -6,8 +6,19 @@ This repository contains the seasonal variant of the model of [Brauner et al. *I
 
 For the seasonal variant of the model of [Sharma et al. (2021), *Understanding the effectiveness of government interventions in Europe’s second wave of COVID-19*](https://www.medrxiv.org/content/10.1101/2021.03.25.21254330v1), see the repository [gavento/covid_seasonal_Sharma](https://github.com/gavento/covid_seasonal_Sharma).
 
-## Notes
+# Changelog
 
-The original code has been extended with a seasonal model, extended trace storage with [Arviz](https://arviz-devs.github.io/) `netcdf` export and JSON for plotting (plotting code in [gavento/covid_seasonal_Sharma](https://github.com/gavento/covid_seasonal_Sharma)), and other minor updates. The filtered temperate Europe data subset has been added as `merged_data/data_final_nov_temperate_europe.csv`.
+* Preprint v1 (tag [`preprint-v1`](https://github.com/gavento/covid_seasonal_Brauner/releases/tag/preprint-v1))
+  * Add seasonality model, customized and extended plotters
+  * Added filtered temperate Europe data subset has been added as `merged_data/data_final_nov_temperate_europe.csv`.
+  * Runners and configs for sensitivity analyses
+  * Extended trace storage with [Arviz](https://arviz-devs.github.io/) `netcdf` export and JSON for plotting
+    * Plotting code in repository [gavento/covid_seasonal_Sharma](https://github.com/gavento/covid_seasonal_Sharma))
+  * Minor updates and fixes
 
-Please contact Tomáš Gavenčiak or Mrinank Sharma for questions regarding the codebase.
+* Preprint v2 (tag [`preprint-v2`](https://github.com/gavento/covid_seasonal_Brauner/releases/tag/preprint-v2))
+  * Added mobility sensitivity analysis, data and plotters
+
+# Questions?
+
+Please email Tomáš Gavenčiak (`gavento` at `ucw` dot `cz`) or Mrinank Sharma (`mrinank` at `robots` dot `ac` dot `uk`, only regarding their code) for questions regarding the codebase.
