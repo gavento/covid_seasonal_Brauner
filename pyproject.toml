@@ -21,7 +21,7 @@ tqdm = "^4.45.0"
 graphviz = "^0.13.2"
 jupyterlab = "^3.0"
 nbdime = "^2.0.0"
-pyreadr = "^0.2.9"
+pyreadr = "^0.4.0"
 sklearn = "^0.0"
 pyyaml = "^5.3.1"
 sphinx = {version = "^3.2.1", extras = ["documentation"]}

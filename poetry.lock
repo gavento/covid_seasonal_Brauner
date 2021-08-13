@@ -857,13 +857,14 @@ test = ["pytest (>=4.0.2)", "pytest-xdist", "hypothesis (>=3.58)"]
 
 [[package]]
 name = "pandoc"
-version = "1.0.2"
+version = "1.1.0"
 description = "Pandoc Documents for Python"
 category = "main"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
+plumbum = "*"
 ply = "*"
 
 [[package]]
@@ -931,6 +932,22 @@ description = "Python Imaging Library (Fork)"
 category = "main"
 optional = false
 python-versions = ">=3.6"
+
+[[package]]
+name = "plumbum"
+version = "1.7.0"
+description = "Plumbum: shell combinators library"
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4,>=2.7"
+
+[package.dependencies]
+pypiwin32 = {version = "*", markers = "platform_system == \"Windows\" and platform_python_implementation != \"PyPy\""}
+
+[package.extras]
+dev = ["pytest", "pytest-cov", "pytest-mock", "pytest-timeout", "paramiko", "psutil"]
+docs = ["recommonmark (>=0.5.0)", "Sphinx (>=3.0.0)", "sphinx-rtd-theme (>=0.5.0)"]
+ssh = ["paramiko"]
 
 [[package]]
 name = "ply"
@@ -1017,7 +1034,7 @@ typing-extensions = ">=3.7.4"
 
 [[package]]
 name = "pypandoc"
-version = "1.5"
+version = "1.6.3"
 description = "Thin wrapper for pandoc."
 category = "main"
 optional = false
@@ -1032,8 +1049,19 @@ optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
+name = "pypiwin32"
+version = "223"
+description = ""
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pywin32 = ">=223"
+
+[[package]]
 name = "pyreadr"
-version = "0.2.9"
+version = "0.4.2"
 description = "Reads/writes R RData and Rds files into/from pandas data frames."
 category = "main"
 optional = false
@@ -1552,7 +1580,7 @@ documentation = []
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.6.9"
-content-hash = "1753c1c0d17911234ddc9fa2d05b7b6b2e43607cb91aa114505c06596cba2335"
+content-hash = "cb5072188fcec906eade8af8916e9cfe42eb76fdeecfd286eff7ec46eaefadcc"
 
 [metadata.files]
 alabaster = [
@@ -2093,7 +2121,8 @@ pandas = [
     {file = "pandas-1.1.5.tar.gz", hash = "sha256:f10fc41ee3c75a474d3bdf68d396f10782d013d7f67db99c0efbfd0acb99701b"},
 ]
 pandoc = [
-    {file = "pandoc-1.0.2.tar.gz", hash = "sha256:1b54f65f127583be75c74b63378ca42a8adc80955de3d33e8915fec35617b1fd"},
+    {file = "pandoc-1.1.0-py3-none-any.whl", hash = "sha256:9859c4ca9d23bed8d8a71dd5e27f668fe7e68d6e1ea18e3ce1b9b890d53e6e95"},
+    {file = "pandoc-1.1.0.tar.gz", hash = "sha256:374f1791151b084e7aac17feeadf43b0c08f0ed39c666a907040f4ee18016b73"},
 ]
 pandocfilters = [
     {file = "pandocfilters-1.4.3.tar.gz", hash = "sha256:bc63fbb50534b4b1f8ebe1860889289e8af94a23bff7445259592df25a3906eb"},
@@ -2154,6 +2183,10 @@ pillow = [
     {file = "Pillow-8.2.0-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:8b56553c0345ad6dcb2e9b433ae47d67f95fc23fe28a0bde15a120f25257e291"},
     {file = "Pillow-8.2.0.tar.gz", hash = "sha256:a787ab10d7bb5494e5f76536ac460741788f1fbce851068d73a87ca7c35fc3e1"},
 ]
+plumbum = [
+    {file = "plumbum-1.7.0-py2.py3-none-any.whl", hash = "sha256:139bbe08ee065b522a8a07d4f7e9f8eddffd78cc218b65b11cca2b33683e6b57"},
+    {file = "plumbum-1.7.0.tar.gz", hash = "sha256:317744342c755319907c773cc87c3a30adaa3a41b0d34c0ce02d9d1904922dce"},
+]
 ply = [
     {file = "ply-3.11-py2.py3-none-any.whl", hash = "sha256:096f9b8350b65ebd2fd1346b12452efe5b9607f7482813ffca50c22722a807ce"},
     {file = "ply-3.11.tar.gz", hash = "sha256:00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3"},
@@ -2187,30 +2220,35 @@ pymc3 = [
     {file = "pymc3-3.10.0.tar.gz", hash = "sha256:6a1461a6239758edb78f66d31b3975dce54b6e80f3938717524e5a17803cc32e"},
 ]
 pypandoc = [
-    {file = "pypandoc-1.5.tar.gz", hash = "sha256:14a49977ab1fbc9b14ef3087dcb101f336851837fca55ca79cf33846cc4976ff"},
+    {file = "pypandoc-1.6.3-py3-none-win_amd64.whl", hash = "sha256:ed2178f0bfc77e565678c10dd7b57143af01a28d6f9d035995518b5e5b7b877b"},
+    {file = "pypandoc-1.6.3.tar.gz", hash = "sha256:95a331f5ef74adb9557e9961d784c30ba73bd0d62e7736bb5d9ce74888b9f438"},
 ]
 pyparsing = [
     {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
     {file = "pyparsing-2.4.7.tar.gz", hash = "sha256:c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1"},
 ]
+pypiwin32 = [
+    {file = "pypiwin32-223-py3-none-any.whl", hash = "sha256:67adf399debc1d5d14dffc1ab5acacb800da569754fafdc576b2a039485aa775"},
+    {file = "pypiwin32-223.tar.gz", hash = "sha256:71be40c1fbd28594214ecaecb58e7aa8b708eabfa0125c8a109ebd51edbd776a"},
+]
 pyreadr = [
-    {file = "pyreadr-0.2.9-cp35-cp35m-macosx_10_6_intel.whl", hash = "sha256:618d40e6811053e7ab66e9931796462ffbfbc2ba39cb351238218c2ab2e45b32"},
-    {file = "pyreadr-0.2.9-cp35-cp35m-manylinux1_i686.whl", hash = "sha256:81ecce61ddb4ed276e0e7bb842100701e1b1f76db8f3da21d1478b7a60dbf59e"},
-    {file = "pyreadr-0.2.9-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:9e57e6911f79a2c06c44d21d99179e5f25a63931b2107133df51adb39f13d8fd"},
-    {file = "pyreadr-0.2.9-cp35-cp35m-win_amd64.whl", hash = "sha256:6e97b7f96a32e21137b131fab1f9d199481ad9536d1fee7e06451c56e2b99b72"},
-    {file = "pyreadr-0.2.9-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:6ebac2609e89a735d419ef56e28ecc4dc526a228919daae51ee8046d09bfd30b"},
-    {file = "pyreadr-0.2.9-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:9ba0d27357af23e4e3652797066dafabad5024470dd46e416aa08c1260525ba7"},
-    {file = "pyreadr-0.2.9-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:80fe8d0f931bb021188db460ed97a0aa4db17f34e9056026901c591d0b0aefb8"},
-    {file = "pyreadr-0.2.9-cp36-cp36m-win_amd64.whl", hash = "sha256:b6aee3fc6882d5bdd17fcd560f524573de54035017aa92434ab0053af168d28e"},
-    {file = "pyreadr-0.2.9-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:91811e7e7ebce8452c7c2cf60f2b579dddc6194d2a305a81a841bb2becd5ec23"},
-    {file = "pyreadr-0.2.9-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:b66a92615dd10d5d4418c511e90f978d4dd8c4f2eb55efcac56e999922ff774d"},
-    {file = "pyreadr-0.2.9-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:6444a878a4c1bac285e3b1234184a7b5a6e96fbdb41866d30e7c7740f3314115"},
-    {file = "pyreadr-0.2.9-cp37-cp37m-win_amd64.whl", hash = "sha256:0f8df92c9197ada5fb191c62afdacde44c15031a50c3219f322409b7b4f7d8c4"},
-    {file = "pyreadr-0.2.9-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:79d4835a7cd5b4d6a3fcefaf6a4f8f02016062d81ffde55f3781659920f0382f"},
-    {file = "pyreadr-0.2.9-cp38-cp38-manylinux1_i686.whl", hash = "sha256:4174420254ea5e8e019e69ca771e99867ffe9db039a24328113f8f9122abacea"},
-    {file = "pyreadr-0.2.9-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:d4d148f4f8502aa22f54a8af2ab664cdd32c92aa72e71e46fc4e626260c03854"},
-    {file = "pyreadr-0.2.9-cp38-cp38-win_amd64.whl", hash = "sha256:7a212a593412307115a5675adde97aa999045722c4d7c667e47470b59cd9aa85"},
-    {file = "pyreadr-0.2.9.tar.gz", hash = "sha256:05e431a70cb16108d39f3291a194e028b0a44b82078ff6edb9bcf1a8f23e8354"},
+    {file = "pyreadr-0.4.2-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:9a43de79b62a9a6462060b41211a4348f689d97b4d8a69bc0391b2eaa4a2a518"},
+    {file = "pyreadr-0.4.2-cp36-cp36m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:c6b339c47766fa8548e946b21e53f4773ad78ba12322c6369524cac562768358"},
+    {file = "pyreadr-0.4.2-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7ab3a5cf1376eb615606a965796bb3be610f0354cc88eb8a17d9e56a5a7f34d4"},
+    {file = "pyreadr-0.4.2-cp36-cp36m-win_amd64.whl", hash = "sha256:43c515dfcd437af8a255f39c970b4db56610b9b97963be1150bf84bd364f0f53"},
+    {file = "pyreadr-0.4.2-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:5a2d3982db3654a8705c2268b41cfb10e6ee7ddc6b28fb9dc5c7ad053d41dfba"},
+    {file = "pyreadr-0.4.2-cp37-cp37m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:c830a401389a59aebd755f180ace585b9d17095878bef09af18961ae59147dd1"},
+    {file = "pyreadr-0.4.2-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a39eff8af01759a4891be6f80111c9f4bf14e3438e184ad3de62247ddba8b520"},
+    {file = "pyreadr-0.4.2-cp37-cp37m-win_amd64.whl", hash = "sha256:12aa06a9508d543b0c2c60d38e70b03663719f5c8d36ba5ada21d35f1aef4ec7"},
+    {file = "pyreadr-0.4.2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:848aa89ed7773d927e4ecc26a304d2e289ee1f5dbcecb447839173dcc15cbefa"},
+    {file = "pyreadr-0.4.2-cp38-cp38-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:e0c261a7e253771f96bfa69dbdc0395f4f9feae1ab5e52d952c52544ba21884c"},
+    {file = "pyreadr-0.4.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fe44cff6849054c469714054c6cfeb772542cb8042396c81fc0dbcb107f5a506"},
+    {file = "pyreadr-0.4.2-cp38-cp38-win_amd64.whl", hash = "sha256:d922a055dc08d46b46d2591d9af79f3d36a1c5ca649ed57da92005ac6beed444"},
+    {file = "pyreadr-0.4.2-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:b6d2c6da417ca4718f42f32d74fd8a782f5888f066c8206ad0a27577bb6b1711"},
+    {file = "pyreadr-0.4.2-cp39-cp39-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:e73e793fe208cd28d417fdebeab6f149f3cc58d7db477b15151491f5f416e929"},
+    {file = "pyreadr-0.4.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:50e5060079ca1acd0e14c39ad1f6b24d90968991a4a4b07dcfe17365395836ed"},
+    {file = "pyreadr-0.4.2-cp39-cp39-win_amd64.whl", hash = "sha256:7f8eb5307b14f88b45967fc14d301df3cc9b6caaa9306947494702fb7887e2cf"},
+    {file = "pyreadr-0.4.2.tar.gz", hash = "sha256:a878d0ee60ae8eff7d58ddb24ae6bfbec23b824040dc9fb3529b7104f039210f"},
 ]
 pyrsistent = [
     {file = "pyrsistent-0.17.3.tar.gz", hash = "sha256:2e636185d9eb976a18a8a8e96efce62f2905fea90041958d8cc2a189756ebf3e"},
