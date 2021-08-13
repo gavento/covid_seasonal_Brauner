@@ -1,85 +1,6 @@
-### Sharma data experiments
-
-# Non-seasonal one - default
-default_Sharma:
-  experiment_file: new_custom.py
-  experiment_tag: default
-  n_chains: 4
-  n_samples: 1250
-  args:
-    model_type: complex
-    data: "d/modelBrauner_dataSharma.csv"
-    last_day: "2021-01-09"
-    model_config_name: "modelBrauner_dataSharma"
-    basic_R_mean: 1.35  # Sharma default
-
-# Non-seasonal one
-basic_R_normal_Sharma:
-  experiment_file: new_custom.py
-  experiment_tag: basic_R_prior_mean
-  n_chains: 4
-  n_samples: 1250
-  args:
-    model_type: complex
-    data: "d/modelBrauner_dataSharma.csv"
-    last_day: "2021-01-09"
-    model_config_name: "modelBrauner_dataSharma"
-    basic_R_mean:
-      - 1.35  # Sharma default
-      - 1.1
-      - 1.7
-      - 1.5
-
-seasonality_basic_R_normal_Sharma:
-  experiment_file: new_custom.py
-  experiment_tag: seasonality_basic_R_prior
-  n_chains: 4
-  n_samples: 1250
-  args:
-    model_type: complex_seasonal
-    data: "d/modelBrauner_dataSharma.csv"
-    last_day: "2021-01-09"
-    model_config_name: "modelBrauner_dataSharma"
-    basic_R_mean:
-      - 1.35  # Sharma default
-      - 1.1
-      - 1.7
-      - 1.5
-
-seasonality_maxRday_normal_Sharma:
-  experiment_file: new_custom.py
-  experiment_tag: seasonality_max_R_day_normal
-  n_chains: 4
-  n_samples: 1250
-  args:
-    model_type: complex_seasonal
-    data: "d/modelBrauner_dataSharma.csv"
-    last_day: "2021-01-09"
-    model_config_name: "modelBrauner_dataSharma"
-    basic_R_mean: 1.35  # Sharma default
-    max_R_day_prior: "normal"
-
-seasonality_maxRday_fixed_Sharma:
-  experiment_file: new_custom.py
-  experiment_tag: seasonality_max_R_day_fixed
-  n_chains: 4
-  n_samples: 1250
-  args:
-    model_type: complex_seasonal
-    data: "d/modelBrauner_dataSharma.csv"
-    model_config_name: "modelBrauner_dataSharma"
-    basic_R_mean: 1.35  # Sharma default
-    max_R_day_prior: "fixed"
-    max_R_day:
-      - 1
-      - 15
-      - 29
-      - 43
-      - 57
-      - -13
-      - -27
-
-### Brauner data variants
+#######################################
+## Brauner data analyses - non-seasonal
+## BraunerTE = limited to temperate Europe
 
 # Non-seasonal one, ENTIRE WORLD
 default_Brauner:
@@ -89,7 +10,7 @@ default_Brauner:
   n_samples: 1250
   args:
     model_type: complex
-    data: "d/modelBrauner_dataBrauner.csv"
+    data: "data/modelBrauner_dataBrauner.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBrauner"
     basic_R_mean: 3.3  # default for Brauner is 3.28
@@ -102,7 +23,7 @@ default_BraunerTE:
   n_samples: 1250
   args:
     model_type: complex
-    data: "d/modelBrauner_dataBraunerTE.csv"
+    data: "data/modelBrauner_dataBraunerTE.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean: 3.3  # default for Brauner is 3.28
@@ -115,7 +36,7 @@ basic_R_normal_Brauner:
   n_samples: 1250
   args:
     model_type: complex
-    data: "d/modelBrauner_dataBrauner.csv"
+    data: "data/modelBrauner_dataBrauner.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBrauner"
     basic_R_mean:
@@ -133,7 +54,7 @@ basic_R_normal_BraunerTE:
   n_samples: 1250
   args:
     model_type: complex
-    data: "d/modelBrauner_dataBraunerTE.csv"
+    data: "data/modelBrauner_dataBraunerTE.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean:
@@ -143,6 +64,10 @@ basic_R_normal_BraunerTE:
       - 3.5
       - 3.7
 
+###################################
+## Brauner data analyses - seasonal
+## All limited to temperate Europe (TE)
+
 seasonality_basic_R_normal_BraunerTE:
   experiment_file: new_custom.py
   experiment_tag: seasonality_basic_R_prior
@@ -150,7 +75,7 @@ seasonality_basic_R_normal_BraunerTE:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "d/modelBrauner_dataBraunerTE.csv"
+    data: "data/modelBrauner_dataBraunerTE.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean:
@@ -167,7 +92,7 @@ seasonality_local_BraunerTE:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "d/modelBrauner_dataBraunerTE.csv"
+    data: "data/modelBrauner_dataBraunerTE.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean: 3.3  # default for Brauner is 3.28
@@ -186,7 +111,7 @@ seasonality_maxRday_normal_BraunerTE:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "d/modelBrauner_dataBraunerTE.csv"
+    data: "data/modelBrauner_dataBraunerTE.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean: 3.3  # default for Brauner is 3.28
@@ -199,7 +124,7 @@ seasonality_maxRday_fixed_BraunerTE:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "d/modelBrauner_dataBraunerTE.csv"
+    data: "data/modelBrauner_dataBraunerTE.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean: 3.3  # default for Brauner is 3.28
@@ -213,7 +138,9 @@ seasonality_maxRday_fixed_BraunerTE:
       - -13
       - -27
 
-### Brauner TE with mobility
+###########################
+## Brauner TE with mobility
+
 seasonality_mobility_1:
   experiment_file: new_custom.py
   experiment_tag: seasonality_mobility
@@ -221,10 +148,11 @@ seasonality_mobility_1:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "d/modelBrauner_dataBraunerTE_mobility_RecreGrocTransWorkResid.csv"
+    data: "data/modelBrauner_dataBraunerTE_mobility_RecreGrocTransWorkResid.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean: 3.3  # default for Brauner is 3.28
+
 seasonality_mobility_2:
   experiment_file: new_custom.py
   experiment_tag: seasonality_mobility
@@ -232,10 +160,11 @@ seasonality_mobility_2:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "d/modelBrauner_dataBraunerTE_mobility_GrocTransWorkResid.csv"
+    data: "data/modelBrauner_dataBraunerTE_mobility_GrocTransWorkResid.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean: 3.3  # default for Brauner is 3.28
+
 seasonality_mobility_3:
   experiment_file: new_custom.py
   experiment_tag: seasonality_mobility
@@ -243,13 +172,13 @@ seasonality_mobility_3:
   n_samples: 1250
   args:
     model_type: complex_seasonal
-    data: "d/modelBrauner_dataBraunerTE_mobility_GrocTransWork.csv"
+    data: "data/modelBrauner_dataBraunerTE_mobility_GrocTransWork.csv"
     last_day: "2020-05-30"
     model_config_name: "modelBrauner_dataBraunerTE"
     basic_R_mean: 3.3  # default for Brauner is 3.28
 
-
-######################## Old sensitivity analyses below
+#########################################
+## Original sensitivity analyses - unused
 
 ###
 # Mask data for one region and output prediction for the masked region. Runs once for each region.
@@ -514,4 +443,84 @@ fake_npi:
       - 46
       - 47
 
+##########################
+## Sharma data experiments
 
+# Non-seasonal one - default
+default_Sharma:
+  experiment_file: new_custom.py
+  experiment_tag: default
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex
+    data: "data/modelBrauner_dataSharma.csv"
+    last_day: "2021-01-09"
+    model_config_name: "modelBrauner_dataSharma"
+    basic_R_mean: 1.35  # Sharma default
+
+# Non-seasonal one
+basic_R_normal_Sharma:
+  experiment_file: new_custom.py
+  experiment_tag: basic_R_prior_mean
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex
+    data: "data/modelBrauner_dataSharma.csv"
+    last_day: "2021-01-09"
+    model_config_name: "modelBrauner_dataSharma"
+    basic_R_mean:
+      - 1.35  # Sharma default
+      - 1.1
+      - 1.7
+      - 1.5
+
+seasonality_basic_R_normal_Sharma:
+  experiment_file: new_custom.py
+  experiment_tag: seasonality_basic_R_prior
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex_seasonal
+    data: "data/modelBrauner_dataSharma.csv"
+    last_day: "2021-01-09"
+    model_config_name: "modelBrauner_dataSharma"
+    basic_R_mean:
+      - 1.35  # Sharma default
+      - 1.1
+      - 1.7
+      - 1.5
+
+seasonality_maxRday_normal_Sharma:
+  experiment_file: new_custom.py
+  experiment_tag: seasonality_max_R_day_normal
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex_seasonal
+    data: "data/modelBrauner_dataSharma.csv"
+    last_day: "2021-01-09"
+    model_config_name: "modelBrauner_dataSharma"
+    basic_R_mean: 1.35  # Sharma default
+    max_R_day_prior: "normal"
+
+seasonality_maxRday_fixed_Sharma:
+  experiment_file: new_custom.py
+  experiment_tag: seasonality_max_R_day_fixed
+  n_chains: 4
+  n_samples: 1250
+  args:
+    model_type: complex_seasonal
+    data: "data/modelBrauner_dataSharma.csv"
+    model_config_name: "modelBrauner_dataSharma"
+    basic_R_mean: 1.35  # Sharma default
+    max_R_day_prior: "fixed"
+    max_R_day:
+      - 1
+      - 15
+      - 29
+      - 43
+      - 57
+      - -13
+      - -27
