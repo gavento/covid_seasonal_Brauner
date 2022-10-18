@@ -1,6 +1,6 @@
-# Seasonal model of Brauner et al. COVID-19 Nonpharmaceutical Interventions Effectiveness
+# Seasonal model of Brauner et al.: COVID-19 Nonpharmaceutical Interventions Effectiveness
 
-This repository contains one part of the data and code used in the paper [Gavenčiak et al.: *Seasonal variation in SARS-CoV-2 transmission in temperate climates*](https://www.medrxiv.org/content/10.1101/2021.06.10.21258647v1). **Note: this paper is a preprint and has not yet been peer-reviewed.**
+TThis repository contains one part of the code used in the paper [Gavenčiak et al.: Seasonal variation in SARS-CoV-2 transmission in temperate climates: A Bayesian modelling study in 143 European regions](https://doi.org/10.1371/journal.pcbi.1010435), PLOS Comp. Bio., 2022. The 2021 preprint can be found [here](https://www.medrxiv.org/content/10.1101/2021.06.10.21258647v3).
 
 This repository contains the seasonal variant of the model of [Brauner et al. *Inferring the effectiveness of government interventions against COVID-19*](https://www.medrxiv.org/content/10.1101/2020.05.28.20116129v2.article-info) and has been forked from [epidemics/COVIDNPIs](https://github.com/epidemics/COVIDNPIs); please see that repo for further information.
 
@@ -57,6 +57,9 @@ poetry run python scripts/sensitivity_dispatcher.py --max_processes 4 \
   * Added data files exactly as used
   * Updated configs and readme for easier reproduction
 
+* Plos Comp. Bio v1 (tag [`submitted-1`](https://github.com/gavento/covid_seasonal_Brauner/tree/submitted-1))
+  * No changes in this repository
+
 # Questions?
 
-Please email Tomáš Gavenčiak (`gavento` at `ucw` dot `cz`) or Mrinank Sharma (`mrinank` at `robots` dot `ac` dot `uk`, only regarding their code) for questions regarding the codebase.
+Please email Tomáš Gavenčiak (`gavento` at `ucw` dot `cz`) or Mrinank Sharma (`mrinank` at `robots` dot `ac` dot `uk`, only questions regarding their code) for questions regarding the codebase.
